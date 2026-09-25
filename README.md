@@ -1,59 +1,49 @@
-# Sistema de Préstamo de Equipos – SENA (ADSO)
+# Sistema de Prestamo de Equipos - SENA
 
-Proyecto de demostración de **Arquitectura en Capas** y **Patrón Repositorio** para la actividad de Arquitectura de Software.
+Implementacion de arquitectura en capas y patron repositorio para el sistema de gestion de prestamos de equipos de formacion.
 
----
-
-## 📁 Estructura del Proyecto en VS Code
+## Estructura del Proyecto
 
 ```text
 sistema-prestamo-sena/
-│
 ├── src/
+│   ├── controllers/
+│   │   └── PrestamoController.js
 │   ├── data/
-│   │   └── db.js                    # Base de datos simulada en memoria
-│   │
-│   ├── entities/                    # Modelos / Entidades del negocio
-│   │   ├── Aprendiz.js              # Entidad Aprendiz
-│   │   ├── Equipo.js                # Entidad Equipo
-│   │   └── Prestamo.js              # Entidad Préstamo
-│   │
-│   ├── repositories/                # Patrón Repositorio (Acceso a Datos)
-│   │   ├── AprendizRepository.js    # Consultas y guardado de aprendices
-│   │   ├── EquipoRepository.js      # Consultas de disponibilidad y estados
-│   │   └── PrestamoRepository.js    # Registro de préstamos y devoluciones
-│   │
-│   ├── services/                    # Capa de Lógica de Negocio
-│   │   └── PrestamoService.js       # Reglas de negocio (validaciones, bloqueos)
-│   │
-│   ├── controllers/                 # Capa de Controladores / Presentación
-│   │   └── PrestamoController.js    # Manejo de peticiones y respuestas
-│   │
-│   └── index.js                     # Archivo principal de ejecución y pruebas
-│
+│   │   └── db.js
+│   ├── entities/
+│   │   ├── Aprendiz.js
+│   │   ├── Equipo.js
+│   │   └── Prestamo.js
+│   ├── repositories/
+│   │   ├── AprendizRepository.js
+│   │   ├── EquipoRepository.js
+│   │   └── PrestamoRepository.js
+│   ├── services/
+│   │   └── PrestamoService.js
+│   └── index.js
 ├── package.json
 └── README.md
 ```
 
----
+## Descripcion de Capas
 
-## ⚙️ Cómo ejecutar el proyecto
+1. **Entidades (src/entities):** Definen las estructuras y modelos de datos del sistema (Aprendiz, Equipo y Prestamo).
+2. **Repositorios (src/repositories):** Implementan el patron repositorio para encapsular las operaciones de lectura, insercion y actualizacion en la fuente de datos.
+3. **Servicios (src/services):** Contienen la logica de negocio, validaciones de disponibilidad de equipos y reglas de operacion.
+4. **Controladores (src/controllers):** Gestionan las peticiones entrantes y estructuran las respuestas del sistema.
+5. **Punto de entrada (src/index.js):** Ejecuta la integracion de las capas y las pruebas de los casos de uso.
 
-1. Abre una terminal en la carpeta del proyecto en VS Code:
-```bash
-node src/index.js
-```
+## Instrucciones de Ejecucion
 
-2. O con npm:
+Para ejecutar la aplicacion y las pruebas integradas:
+
 ```bash
 npm start
 ```
 
----
+O directamente mediante Node.js:
 
-## 🧠 ¿Cómo funciona cada capa?
-
-1. **Entities (`src/entities/`):** Definen la estructura de los objetos (qué datos tiene un Aprendiz, un Equipo o un Préstamo).
-2. **Repositories (`src/repositories/`):** Son los únicos que tocan la base de datos (`db.js`). Tienen métodos como `guardar()`, `buscarPorId()` y `actualizarEstado()`.
-3. **Services (`src/services/`):** El cerebro del sistema. Valida si el equipo está disponible antes de prestarlo. Si ya está prestado, bloquea la acción.
-4. **Controllers (`src/controllers/`):** Reciben las peticiones del usuario o de una vista web y entregan las respuestas con formato de éxito o error.
+```bash
+node src/index.js
+```

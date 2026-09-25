@@ -1,6 +1,6 @@
 import { Prestamo } from "../entities/Prestamo.js";
 
-// Capa de Negocio: Aplica todas las reglas del sistema
+// Capa de logica de negocio: implementacion de reglas y validaciones
 export class PrestamoService {
   constructor({ aprendizRepository, equipoRepository, prestamoRepository }) {
     this.aprendizRepo = aprendizRepository;
@@ -8,31 +8,31 @@ export class PrestamoService {
     this.prestamoRepo = prestamoRepository;
   }
 
-  // Regla 1: Consultar equipos disponibles
+  // Consultar equipos en estado disponible
   obtenerEquiposDisponibles() {
     return this.equipoRepo.buscarDisponibles();
   }
 
-  // Regla 2: Realizar un préstamo validando disponibilidad (Punto 6 del taller)
+  // Registrar un nuevo prestamo validando la disponibilidad del equipo
   realizarPrestamo({ idAprendiz, idEquipo }) {
-    // 1. Validar que el aprendiz exista
+    // Validar existencia del aprendiz
     const aprendiz = this.aprendizRepo.buscarPorId(idAprendiz);
     if (!aprendiz) {
       throw new Error(`El aprendiz con ID/documento "${idAprendiz}" no se encuentra registrado.`);
     }
 
-    // 2. Validar que el equipo exista
+    // Validar existencia del equipo
     const equipo = this.equipoRepo.buscarPorId(idEquipo);
     if (!equipo) {
       throw new Error(`El equipo con ID "${idEquipo}" no existe en el inventario.`);
     }
 
-    // 3. Regla principal: Evitar que un equipo ya prestado vuelva a prestarse
+    // Validar que el equipo se encuentre disponible
     if (equipo.estado !== "Disponible") {
-      throw new Error(`Acción no permitida: El equipo "${equipo.nombre}" no está disponible (Estado actual: ${equipo.estado}).`);
+      throw new Error(`Accion no permitida: El equipo "${equipo.nombre}" no esta disponible (Estado actual: ${equipo.estado}).`);
     }
 
-    // 4. Crear el registro del préstamo
+    // Generar registro de prestamo
     const nuevoId = `PR-${Date.now()}`;
     const prestamo = new Prestamo({
       id: nuevoId,
@@ -44,44 +44,44 @@ export class PrestamoService {
 
     this.prestamoRepo.crearPrestamo(prestamo);
 
-    // 5. Actualizar el estado del equipo a "Prestado"
+    // Actualizar estado del equipo a prestado
     this.equipoRepo.actualizarEstado(equipo.id, "Prestado");
 
     return {
-      mensaje: "Préstamo registrado exitosamente",
+      mensaje: "Prestamo registrado exitosamente",
       prestamo,
       equipo: equipo.nombre,
       aprendiz: aprendiz.nombreCompleto
     };
   }
 
-  // Regla 3: Registrar devolución y liberar el equipo
+  // Registrar devolucion y liberar equipo
   registrarDevolucion(idPrestamo) {
     const prestamo = this.prestamoRepo.buscarPorId(idPrestamo);
     if (!prestamo) {
-      throw new Error(`El préstamo con ID "${idPrestamo}" no existe.`);
+      throw new Error(`El prestamo con ID "${idPrestamo}" no existe.`);
     }
 
     if (prestamo.estado === "Finalizado") {
-      throw new Error(`El préstamo "${idPrestamo}" ya fue finalizado previamente.`);
+      throw new Error(`El prestamo "${idPrestamo}" ya fue finalizado previamente.`);
     }
 
-    // Actualizar registro del préstamo
+    // Actualizar registro del prestamo
     const devolucion = this.prestamoRepo.registrarDevolucion(
       idPrestamo,
       new Date().toLocaleString("es-CO")
     );
 
-    // Devolver el estado del equipo a "Disponible"
+    // Actualizar estado del equipo a disponible
     this.equipoRepo.actualizarEstado(prestamo.idEquipo, "Disponible");
 
     return {
-      mensaje: "Devolución registrada con éxito. Equipo disponible nuevamente.",
+      mensaje: "Devolucion registrada con exito. Equipo disponible nuevamente.",
       prestamo: devolucion
     };
   }
 
-  // Regla 4: Consultar quién tiene un equipo prestado actualmente
+  // Consultar estado actual y responsable de un equipo
   consultarQuienTieneEquipo(idEquipo) {
     const equipo = this.equipoRepo.buscarPorId(idEquipo);
     if (!equipo) {
@@ -92,7 +92,7 @@ export class PrestamoService {
       return {
         equipo: equipo.nombre,
         estado: equipo.estado,
-        mensaje: "El equipo está disponible en el ambiente de formación (no está prestado)."
+        mensaje: "El equipo esta disponible en el ambiente de formacion (no esta prestado)."
       };
     }
 
@@ -101,7 +101,7 @@ export class PrestamoService {
       return {
         equipo: equipo.nombre,
         estado: equipo.estado,
-        mensaje: "No se encontró registro activo asociado."
+        mensaje: "No se encontro registro activo asociado."
       };
     }
 

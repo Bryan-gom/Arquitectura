@@ -1,4 +1,4 @@
-// Simulación de Base de Datos en Memoria para pruebas del SENA
+// Base de datos en memoria para el sistema de prestamos
 export const db = {
   aprendices: [
     {

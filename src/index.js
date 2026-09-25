@@ -4,58 +4,54 @@ import { PrestamoRepository } from "./repositories/PrestamoRepository.js";
 import { PrestamoService } from "./services/PrestamoService.js";
 import { PrestamoController } from "./controllers/PrestamoController.js";
 
-// ==========================================
-// INICIALIZACIÓN DE LA ARQUITECTURA EN CAPAS
-// ==========================================
-// 1. Capa de Datos (Repositorios)
+// Inicializacion de capas del sistema
+// 1. Capa de acceso a datos (Repositorios)
 const aprendizRepo = new AprendizRepository();
 const equipoRepo = new EquipoRepository();
 const prestamoRepo = new PrestamoRepository();
 
-// 2. Capa de Negocio (Servicios con reglas)
+// 2. Capa de logica de negocio (Servicios)
 const prestamoService = new PrestamoService({
   aprendizRepository: aprendizRepo,
   equipoRepository: equipoRepo,
   prestamoRepository: prestamoRepo
 });
 
-// 3. Capa de Presentación / Controlador
+// 3. Capa de presentacion (Controlador)
 const controller = new PrestamoController(prestamoService);
 
-console.log("==================================================");
-console.log(" 🚀 SISTEMA DE PRÉSTAMO DE EQUIPOS - SENA (ADSO)");
-console.log(" Demostración de Arquitectura y Patrón Repositorio");
-console.log("==================================================\n");
+console.log("Sistema de Prestamo de Equipos - SENA");
+console.log("Demostracion de arquitectura en capas y patron repositorio\n");
 
-// PASO 1: Consultar equipos disponibles
-console.log("🔹 1. Consultando equipos disponibles inicialmente:");
+// 1. Consultar equipos disponibles
+console.log("1. Consulta de equipos disponibles inicialmente:");
 const resDisponibles = controller.listarEquiposDisponibles();
 console.table(resDisponibles.data.map(e => ({ ID: e.id, Nombre: e.nombre, Estado: e.estado })));
 
-// PASO 2: Realizar un préstamo exitoso
-console.log("\n🔹 2. Aprendiz 'Bryan Gómez' solicita el préstamo del equipo 'EQ-01':");
+// 2. Realizar un prestamo
+console.log("\n2. Registro de prestamo para el equipo EQ-01 por el aprendiz Bryan Gomez:");
 const prestamo1 = controller.crearPrestamo({ idAprendiz: "AP-01", idEquipo: "EQ-01" });
 console.log("Resultado:", prestamo1);
 
-// PASO 3: Intentar prestar el mismo equipo a otro aprendiz (Demostración de la Regla del Punto 6)
-console.log("\n🔹 3. Aprendiz 'Valery Castro' intenta solicitar el MISMO equipo 'EQ-01' (ya prestado):");
+// 3. Validacion de disponibilidad ante solicitud simultanea
+console.log("\n3. Intento de prestamo del mismo equipo EQ-01 (equipo ya prestado):");
 const intentoFallido = controller.crearPrestamo({ idAprendiz: "AP-02", idEquipo: "EQ-01" });
-console.log("Resultado esperado (Bloqueo):", intentoFallido);
+console.log("Resultado obtenido:", intentoFallido);
 
-// PASO 4: Consultar quién tiene el equipo 'EQ-01'
-console.log("\n🔹 4. Consultando quién tiene el equipo 'EQ-01' actualmente:");
+// 4. Consultar responsable del equipo
+console.log("\n4. Consulta del estado actual y responsable del equipo EQ-01:");
 const consultaQuien = controller.verQuienTieneEquipo("EQ-01");
 console.log(consultaQuien.data);
 
-// PASO 5: Registrar la devolución del equipo
-console.log("\n🔹 5. Se registra la devolución del préstamo:");
+// 5. Registrar devolucion del equipo
+console.log("\n5. Registro de devolucion del equipo:");
 const idPrestamoGenerado = prestamo1.prestamo.id;
 const devolucion = controller.devolverEquipo(idPrestamoGenerado);
-console.log("Resultado de devolución:", devolucion);
+console.log("Resultado de devolucion:", devolucion);
 
-// PASO 6: Verificar que el equipo quedó disponible de nuevo
-console.log("\n🔹 6. Verificando estado final de equipos disponibles:");
+// 6. Verificar actualizacion del inventario
+console.log("\n6. Verificacion del estado de equipos disponibles tras devolucion:");
 const resFinal = controller.listarEquiposDisponibles();
 console.table(resFinal.data.map(e => ({ ID: e.id, Nombre: e.nombre, Estado: e.estado })));
 
-console.log("\n✅ Todas las pruebas de la arquitectura y repositorios pasaron con éxito.");
+console.log("\nPruebas finalizadas correctamente.");

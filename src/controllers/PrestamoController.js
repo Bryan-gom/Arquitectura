@@ -1,10 +1,10 @@
-// Capa de Controladores: Atiende peticiones del usuario o de la interfaz
+// Capa de controladores: gestion de peticiones y respuestas
 export class PrestamoController {
   constructor(prestamoService) {
     this.service = prestamoService;
   }
 
-  // GET: Listar equipos disponibles
+  // Listar equipos en estado disponible
   listarEquiposDisponibles() {
     try {
       const disponibles = this.service.obtenerEquiposDisponibles();
@@ -14,7 +14,7 @@ export class PrestamoController {
     }
   }
 
-  // POST: Crear nuevo préstamo
+  // Registrar nuevo prestamo
   crearPrestamo(peticion) {
     try {
       const resultado = this.service.realizarPrestamo(peticion);
@@ -24,7 +24,7 @@ export class PrestamoController {
     }
   }
 
-  // PUT: Registrar devolución
+  // Registrar devolucion de un equipo
   devolverEquipo(idPrestamo) {
     try {
       const resultado = this.service.registrarDevolucion(idPrestamo);
@@ -34,7 +34,7 @@ export class PrestamoController {
     }
   }
 
-  // GET: Consultar quién tiene un equipo
+  // Consultar estado actual de un equipo
   verQuienTieneEquipo(idEquipo) {
     try {
       const resultado = this.service.consultarQuienTieneEquipo(idEquipo);

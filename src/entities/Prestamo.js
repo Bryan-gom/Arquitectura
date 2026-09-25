@@ -1,4 +1,4 @@
-// Entidad Préstamo
+// Entidad Prestamo
 export class Prestamo {
   constructor({ id, idAprendiz, idEquipo, fechaPrestamo = new Date().toISOString(), fechaDevolucion = null, estado = "Activo" }) {
     this.id = id;

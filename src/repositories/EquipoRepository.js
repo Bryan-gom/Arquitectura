@@ -1,21 +1,21 @@
 import { db } from "../data/db.js";
 
-// Repositorio encargado del acceso a datos de los Equipos
+// Repositorio para la gestion de datos de equipos
 export class EquipoRepository {
-  // Guardar nuevo equipo en la base de datos
+  // Guardar equipo
   guardar(equipo) {
     db.equipos.push(equipo);
     return equipo;
   }
 
-  // Buscar equipo por ID o Serial
+  // Buscar equipo por identificador o serial
   buscarPorId(idOSerial) {
     return db.equipos.find(
       (e) => e.id === idOSerial || e.codigoSerial === idOSerial
     ) || null;
   }
 
-  // Listar únicamente equipos disponibles
+  // Listar equipos disponibles
   buscarDisponibles() {
     return db.equipos.filter((e) => e.estado === "Disponible");
   }
@@ -25,7 +25,7 @@ export class EquipoRepository {
     return [...db.equipos];
   }
 
-  // Actualizar estado del equipo ("Disponible" o "Prestado")
+  // Actualizar estado del equipo
   actualizarEstado(id, nuevoEstado) {
     const equipo = this.buscarPorId(id);
     if (equipo) {

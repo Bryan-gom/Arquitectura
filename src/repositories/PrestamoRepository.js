@@ -1,36 +1,36 @@
 import { db } from "../data/db.js";
 
-// Repositorio encargado del acceso a datos de los Préstamos
+// Repositorio para la gestion de datos de prestamos
 export class PrestamoRepository {
-  // Crear un nuevo registro de préstamo
+  // Registrar prestamo
   crearPrestamo(prestamo) {
     db.prestamos.push(prestamo);
     return prestamo;
   }
 
-  // Buscar préstamo por ID
+  // Buscar prestamo por identificador
   buscarPorId(id) {
     return db.prestamos.find((p) => p.id === id) || null;
   }
 
-  // Buscar todos los préstamos que están actualmente activos (no devueltos)
+  // Listar prestamos con estado activo
   buscarPrestamosActivos() {
     return db.prestamos.filter((p) => p.estado === "Activo");
   }
 
-  // Buscar historial de préstamos de un aprendiz
+  // Consultar historial de prestamos por aprendiz
   buscarPorAprendiz(idAprendiz) {
     return db.prestamos.filter((p) => p.idAprendiz === idAprendiz);
   }
 
-  // Buscar si un equipo específico tiene un préstamo activo
+  // Consultar prestamo activo de un equipo especifico
   buscarActivoPorEquipo(idEquipo) {
     return db.prestamos.find(
       (p) => p.idEquipo === idEquipo && p.estado === "Activo"
     ) || null;
   }
 
-  // Registrar la devolución del equipo
+  // Registrar fecha de devolucion y actualizar estado a finalizado
   registrarDevolucion(idPrestamo, fechaDevolucion = new Date().toISOString()) {
     const prestamo = this.buscarPorId(idPrestamo);
     if (prestamo) {
@@ -41,7 +41,7 @@ export class PrestamoRepository {
     return null;
   }
 
-  // Listar todos los registros
+  // Listar todos los registros de prestamos
   listarTodos() {
     return [...db.prestamos];
   }

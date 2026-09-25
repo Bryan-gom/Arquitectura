@@ -1,21 +1,21 @@
 import { db } from "../data/db.js";
 
-// Repositorio encargado del acceso a datos de los Aprendices
+// Repositorio para la gestion de datos de aprendices
 export class AprendizRepository {
-  // Guardar nuevo aprendiz
+  // Guardar aprendiz
   guardar(aprendiz) {
     db.aprendices.push(aprendiz);
     return aprendiz;
   }
 
-  // Buscar por ID o por documento
+  // Buscar aprendiz por identificador o documento
   buscarPorId(idODocumento) {
     return db.aprendices.find(
       (a) => a.id === idODocumento || a.documento === idODocumento
     ) || null;
   }
 
-  // Listar todos los aprendices
+  // Listar todos los aprendices registrados
   listarTodos() {
     return [...db.aprendices];
   }
